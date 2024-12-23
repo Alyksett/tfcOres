@@ -1,35 +1,28 @@
 :- use_module(library(clpfd)).
 
-max(1000).
+max(100).
+
 
 find_partial(Copper, Bismuth, Zinc) :-
     /*Var | Nugget (35 units)| Poor (35 units)| Normal (35 units)| Rich (35 units) */
-    find(Copper, 0, 10, 0, 0, Bismuth, 0, 10, 0, 0, Zinc, 0, 10, 0, 0).
+    find(Copper, 5, Bismuth, 12, Zinc, 12).
+
 
 find(Copper,
- CopperNugget,
-  CopperPoor,
-   CopperNormal,
-    CopperRich,
-     Bismuth,
-      BismuthNugget,
-       BismuthPoor,
-        BismuthNormal,
-         BismuthRich,
-          Zinc,
-           ZincNugget,
-            ZincPoor,
-             ZincNormal,
-              ZincRich) :-
+    CopperNugget,
+    Bismuth,
+    BismuthNugget,
+    Zinc,
+    ZincNugget) :-
+    
     max(Max),
-
     Copper #>= 0, Copper #=< Max,
     Bismuth #>= 0, Bismuth #=< Max,
     Zinc #>= 0, Zinc #=< Max,
     
-    Copper mod 15 #=0,
-    Bismuth mod 15 #=0,
-    Zinc mod 15 #=0,
+    (Copper mod 10 #=0, Copper // 10 #=< CopperNugget, CopperNugget - 1 #\=0),
+    (Bismuth mod 10 #=0, Bismuth // 10 #=< BismuthNugget, BismuthNugget - 1 #\=0),
+    (Zinc mod 10 #=0, Zinc // 10 #=< ZincNugget, ZincNugget - 1 #\=0),
     
     S #= Copper + Bismuth + Zinc,
     S #=< Max,
@@ -44,4 +37,5 @@ find(Copper,
     Zincr #>= 10, Zincr #=< 20,
 
     labeling([], [Copper, Bismuth, Zinc]).
-    
+     
+
