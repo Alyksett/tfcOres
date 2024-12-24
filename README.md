@@ -10,4 +10,4 @@ Currently, Bismuith Bronze is hard-coded into the program (although changing it 
 
 You can also call `dump_solutions.` to write the results to a text file.
 
-Note that in practice, the solution space is so large that any real-world quantities of ores is unfortunately infeasable to write. This does however work for smaller quantities.
+Note that in practice, the solution space is so large that any real-world quantities of ores is unfortunately infeasable to write. This does however work for smaller quantities. For example the commented out set of ore quantities (The actual set of quantities that motivated this project) will take (based on a rough benchmark) roughly `690134.0015038028` years to fully compute, which is likely impractical.
