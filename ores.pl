@@ -1,15 +1,15 @@
 :- use_module(library(clpfd)).
 
 /*
-    Constraints for multiples of ores + purities
+    Constraints
 
     Tc = (nu_c*C_nu + po_c*C_p + noc*C_no +  pu_c*C_p)
     Tb = (nu_b*B_nu + po_b*B_p + nob*B_no +  pu_b*C_p)
     Tz = (nu_z*Z_nu + po_z*Z_p + noz*Z_no +  pu_z*C_p)
 
-    | nuc < am_nuc, po_c < am_nuc, noc < am_noc, pu_c < am_nuc,    
-    | nub < am_nub, po_b < am_nub, nob < am_nob, pu_b < am_nub,    
-    | nuz < am_nuz, po_z < am_nuz, noz < am_noz, pu_z < am_nuz,    
+    0nuc < am_nuc, po_c < am_nuc, noc < am_noc, pu_c < am_nuc,    
+    nub < am_nub, po_b < am_nub, nob < am_nob, pu_b < am_nub,    
+    nuz < am_nuz, po_z < am_nuz, noz < am_noz, pu_z < am_nuz,    
 
     Copper:
         50-65%
@@ -17,14 +17,15 @@
         10-20%
     Zinc:
         20-30%
-    and ratios + units
+    
+    Total % 100 = 0
+
 */
 
-
-max(200).
+% 2240 is the max mb that a vessel can store
+max(2240).
 
 find_partial(Copper, Bismuth, Zinc) :-
-    /* Nugget (10 units)| Poor (15 units)| Normal (25 units)| Rich (35 units) */
     find(Copper, 1, 3, 0, 0, Bismuth, 10, 20, 10, 0, Zinc, 10, 20, 10, 0).
 
 find(
