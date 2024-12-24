@@ -26,7 +26,8 @@
 max(2240).
 
 find_partial(Copper, Bismuth, Zinc) :-
-    find(Copper, 1, 3, 0, 0, Bismuth, 10, 20, 10, 0, Zinc, 10, 20, 10, 0).
+    %find(Copper, 0, 40, 9, 2, Bismuth, 1, 93, 32, 7, Zinc, 16, 192, 60, 15).
+    find(Copper, 0, 4, 3, 2, Bismuth, 1, 3, 3, 2, Zinc, 6, 1, 6, 1).
 
 find(
     Copper,
@@ -46,6 +47,24 @@ find(
     ZincRich
     ) :-
     
+    max(MaxLimit),
+    Copper #>= 0, Copper #=< MaxLimit,
+    Bismuth #>= 0, Bismuth #=< MaxLimit,
+    Zinc #>= 0, Zinc #=< MaxLimit,
+
+    S #= Copper + Bismuth + Zinc,
+    S #> 0,
+    S #=< MaxLimit,
+    S mod 100 #=0,
+   
+    Copperr #= (Copper * 100) // S,
+    Bismuthr #= (Bismuth * 100) // S,
+    Zincr #= (Zinc * 100) // S,
+    
+    Copperr #>= 50, Copperr #=< 65,
+    Bismuthr #>= 10, Bismuthr #=< 20,
+    Zincr #>= 20, Zincr #=< 30,
+
     CopperNuggetRange #>= 0, CopperNuggetRange #=< CopperNugget,
     CopperPoorRange #>= 0, CopperPoorRange #=< CopperPoor,
     CopperNormalRange #>= 0, CopperNormalRange #=< CopperNormal,
@@ -65,29 +84,10 @@ find(
     Zinc #= (ZincNuggetRange * 10 + ZincPoorRange * 15 + ZincNormalRange * 25 + ZincRichRange * 35),
     
     
-    max(MaxLimit),
-    
-    Copper #>= 0, Copper #=< MaxLimit,
-    Bismuth #>= 0, Bismuth #=< MaxLimit,
-    Zinc #>= 0, Zinc #=< MaxLimit,
+    labeling([min], [S, ZincNuggetRange, ZincPoorRange, ZincNormalRange, ZincRichRange, CopperNuggetRange, CopperPoorRange, CopperNormalRange, CopperRichRange, BismuthNuggetRange, BismuthPoorRange, BismuthNormalRange, BismuthRichRange]).
 
-    S #= Copper + Bismuth + Zinc,
-    S #> 0,
-    S #=< MaxLimit,
-    S mod 100 #=0,
-   
-    Copperr #= (Copper * 100) // S,
-    Bismuthr #= (Bismuth * 100) // S,
-    Zincr #= (Zinc * 100) // S,
-    
-    Copperr #>= 50, Copperr #=< 65,
-    Bismuthr #>= 10, Bismuthr #=< 20,
-    Zincr #>= 20, Zincr #=< 30,
-
-    % fudge the solver to bind vars to values? Need this
-    labeling([], [Copper, Bismuth, Zinc, CopperNugget, CopperPoor, CopperNormal, BismuthNugget, BismuthPoor, BismuthNormal, ZincNugget, ZincPoor, ZincNormal, ZincNuggetRange, ZincPoorRange, ZincNormalRange, ZincRichRange]),
-
-
+    /*
+    write('============================='), nl,
     write('Copper Nuggets: '), write(CopperNuggetRange), nl,
     write('Copper Poor: '), write(CopperPoorRange), nl,
     write('Copper Normal: '), write(CopperNormalRange), nl,
@@ -99,8 +99,26 @@ find(
     write('Zinc Nugget: '), write(ZincNuggetRange), nl,
     write('Zinc Poor: '), write(ZincPoorRange), nl,
     write('Zinc Normal: '), write(ZincNormalRange), nl,
-    write('Zinc Rich: '), write(ZincRichRange), nl.
+    write('Zinc Rich: '), write(ZincRichRange), nl,
+    write('=============================').
+    */
 
+dump_solutions :-
+    get_time(StartTime),
+    % Collect all solutions for the query with partial parameters
+    findall([Copper, Bismuth, Zinc],
+            find_partial(Copper, Bismuth, Zinc),
+            Solutions),
+    % Open the file for writing
+    tell('solutions2.txt'),
+    % Write all the solutions to the file
+    write(Solutions),
+    % Close the output file
+    told,
+    get_time(EndTime),
     
+    % Calculate and print the elapsed time
+    ElapsedTime is EndTime - StartTime,
+    format('Time taken: ~2f seconds~n', [ElapsedTime]).
 
 
